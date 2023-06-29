@@ -51,6 +51,7 @@ public class RedisServiceImpl implements RedisService {
         RedisGeoCommands.GeoRadiusCommandArgs args = RedisGeoCommands.GeoRadiusCommandArgs.newGeoRadiusArgs().includeCoordinates().includeDistance();
         GeoResults<RedisGeoCommands.GeoLocation<String>> radius = redisTemplate.opsForGeo().radius(distGeoF.getKeyName(), circle,args);
         ArrayList<DistanceGeoListV> vs = new ArrayList<>();
+        assert radius != null;
         for (GeoResult<RedisGeoCommands.GeoLocation<String>> geoLocationGeoResult : radius) {
             DistanceGeoListV listV = new DistanceGeoListV();
             RedisGeoCommands.GeoLocation<String> content = geoLocationGeoResult.getContent();
@@ -58,7 +59,7 @@ public class RedisServiceImpl implements RedisService {
             listV.setLatitude(BigDecimal.valueOf(point.getY()));
             listV.setLongitude(BigDecimal.valueOf(point.getX()));
             listV.setLocation(content.getName());
-            listV.setRadius(geoLocationGeoResult.getDistance().getValue() + geoLocationGeoResult.getDistance().getUnit());
+            listV.setRadius((int) geoLocationGeoResult.getDistance().getValue() + geoLocationGeoResult.getDistance().getUnit());
             vs.add(listV);
         }
         return vs;
