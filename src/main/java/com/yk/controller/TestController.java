@@ -1,5 +1,6 @@
 package com.yk.controller;
 
+import com.yk.mapper.TestMapper;
 import com.yk.model.form.redis.AddGeoF;
 import com.yk.model.form.redis.DistGeoF;
 import com.yk.model.vo.common.ApiResult;
@@ -10,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,6 +25,9 @@ import java.util.List;
 @Api(tags = "测试模块")
 @RequestMapping("/test")
 public class TestController {
+
+    @Resource
+    private TestMapper testMapper;
 
     @Resource
     private RedisService redisService;
@@ -45,5 +50,10 @@ public class TestController {
         return ApiResult.buildSuccess(redisService.getDist(distGeoF));
     }
 
-
+    @ApiOperation("testSql")
+    @GetMapping("/testSql")
+    public ApiResult<?> testSql() {
+        testMapper.testSql("tets' or '1' = '1");
+        return ApiResult.buildSuccess();
+    }
 }
